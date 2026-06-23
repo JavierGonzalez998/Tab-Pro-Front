@@ -12,6 +12,19 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  // Proxy /api/proxy/* to the private backend so the browser never needs to
+  // resolve the internal Railway domain directly.
+  async rewrites() {
+    const backendUrl =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    return [
+      {
+        source: "/api/proxy/:path*",
+        destination: `${backendUrl}/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
