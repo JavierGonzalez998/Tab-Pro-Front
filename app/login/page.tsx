@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/app/providers'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
-
 export default function LoginPage() {
   const { login, user } = useAuth()
   const router = useRouter()
@@ -91,7 +89,7 @@ export default function LoginPage() {
 
         <button
           type="button"
-          onClick={() => window.location.href = `${API_URL}/api/auth/google`}
+          onClick={() => window.location.href = '/api/auth/google'}
           className="w-full rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-text-primary transition-all duration-200 hover:bg-bg-card-hover cursor-pointer"
         >
           Sign in with Google
