@@ -46,9 +46,17 @@ export default function DashboardPage() {
     else if (token) fetchTabs()
   }, [authLoading, token, router, fetchTabs])
 
+  const MAX_TABS = 5
+
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
+
+    if (tabCount >= MAX_TABS) {
+      setError(`You can upload at most ${MAX_TABS} files.`)
+      e.target.value = ''
+      return
+    }
 
     setError('')
     setUploading(true)
@@ -59,6 +67,7 @@ export default function DashboardPage() {
       await fetchTabs()
     } catch (err: any) {
       setError(err.message)
+      fetchTabs() // re-sync count so the limit lock matches the backend
     } finally {
       setUploading(false)
       // ponytail: reset input value so re-selecting same file triggers onChange
@@ -153,8 +162,10 @@ export default function DashboardPage() {
       )}
 
       {/* Upload */}
-      <label className="block rounded-xl border-2 border-dashed border-border hover:border-accent/50 transition-colors duration-200 p-6 text-center group cursor-pointer">
-        {uploading ? (
+      <label className={`block rounded-xl border-2 border-dashed border-border transition-colors duration-200 p-6 text-center group ${tabCount >= MAX_TABS ? 'opacity-50 cursor-not-allowed' : 'hover:border-accent/50 cursor-pointer'}`}>
+        {tabCount >= MAX_TABS ? (
+          <p className="text-sm font-medium text-text-secondary">Upload limit reached ({MAX_TABS} files max)</p>
+        ) : uploading ? (
           <div className="flex flex-col items-center gap-2">
             <svg className="animate-spin h-8 w-8 text-accent" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
@@ -175,7 +186,7 @@ export default function DashboardPage() {
           type="file"
           accept=".gp,.gp3,.gp4,.gp5,.gpx"
           onChange={handleFileChange}
-          disabled={uploading}
+          disabled={uploading || tabCount >= MAX_TABS}
           className="hidden"
         />
       </label>
