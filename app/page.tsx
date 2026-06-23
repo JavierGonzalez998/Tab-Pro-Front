@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Cloud Guitar Pro Tab Manager",
+  description:
+    "Upload, view, edit and share your Guitar Pro files (.gp, .gp3, .gp4, .gp5, .gpx) online. Built-in player, AlphaTex editor, MIDI export. Free to start — no credit card required.",
+};
 
 const features = [
   {
@@ -76,9 +83,25 @@ const steps = [
   },
 ];
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "TabsPro",
+  description:
+    "Upload, view, edit and share Guitar Pro tablatures from any browser. Cloud tab manager with built-in player, AlphaTex editor, MIDI export and share links.",
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Organization", name: "TabsPro" },
+};
+
 export default function Home() {
   return (
     <div className="flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ───── Section 1: Hero ───── */}
       <section className="relative overflow-hidden">
         {/* Background image with overlay */}
