@@ -1,4 +1,4 @@
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+const BASE = '/api/proxy'
 
 async function request(path: string, options: RequestInit = {}, token?: string) {
   const headers: Record<string, string> = {}
@@ -26,3 +26,4 @@ export const api = {
   putForm: (path: string, body: FormData, token?: string) =>
     request(path, { method: 'PUT', body }, token),
 }
+
